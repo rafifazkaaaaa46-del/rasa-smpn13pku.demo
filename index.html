@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#312e81">
+  <title>R.A.S.A. (Demo) — Ruang Aman Siswa & Aduan SMP Negeri 13 Pekanbaru</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    html { scroll-behavior: smooth; }
+    .hidden-view { display: none !important; }
+    .soft-shadow { box-shadow: 0 20px 60px rgba(30, 27, 75, .10); }
+    .field { width:100%; border:1px solid #cbd5e1; border-radius:14px; padding:12px 14px; background:#fff; outline:none; transition:.2s; font-size:14px; }
+    .field:focus { border-color:#6366f1; box-shadow:0 0 0 3px rgba(99,102,241,.14); }
+    .field-label { display:block; font-size:13px; font-weight:700; color:#334155; margin-bottom:7px; }
+    .eyebrow { letter-spacing:.14em; text-transform:uppercase; font-size:11px; font-weight:800; }
+    .nav-btn { padding:9px 12px; border-radius:10px; font-size:13px; font-weight:700; transition:.2s; }
+    .nav-btn:hover { background:rgba(255,255,255,.12); }
+    .status-wait { background:#fef3c7; color:#92400e; }
+    .status-process { background:#dbeafe; color:#1d4ed8; }
+    .status-done { background:#d1fae5; color:#065f46; }
+    .toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:100; max-width:calc(100% - 32px); }
+    @media (max-width: 640px) {
+      .mobile-nav { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:5px; width:100%; margin-top:12px; }
+      .mobile-nav .nav-btn { font-size:11px; padding:8px 5px; }
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800 flex flex-col">
+  <header class="sticky top-0 z-40 bg-indigo-950 text-white shadow-lg shadow-indigo-950/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <button onclick="switchView('home')" class="flex items-center gap-3 text-left">
+          <span class="grid place-items-center w-11 h-11 rounded-2xl bg-indigo-500 shadow-lg shadow-indigo-500/30">
+            <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 20 6v5c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6l8-3Z"/><path d="m8.5 12 2.2 2.2 4.8-5"/></svg>
+          </span>
+          <span>
+            <span class="block text-xl font-extrabold tracking-tight">R.A.S.A. <span class="text-xs font-semibold px-2 py-0.5 rounded bg-indigo-800 text-cyan-300">DEMO</span></span>
+            <span class="block text-[10px] sm:text-xs text-indigo-200 -mt-0.5">SMP Negeri 13 Pekanbaru</span>
+          </span>
+        </button>
+        <nav class="mobile-nav flex items-center gap-1 sm:gap-2">
+          <button onclick="switchView('home')" class="nav-btn">Beranda</button>
+          <button onclick="switchView('track')" class="nav-btn">Cek Tiket</button>
+          <button onclick="switchView('admin')" class="nav-btn bg-indigo-800 border border-indigo-700">Portal Guru BK ↗</button>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 py-7 sm:py-10">
+    <!-- BERANDA -->
+    <section id="view-home" class="space-y-10">
+      <div class="relative overflow-hidden rounded-[30px] bg-gradient-to-br from-indigo-950 via-indigo-900 to-slate-900 text-white soft-shadow">
+        <div class="absolute -top-24 -right-20 w-80 h-80 rounded-full bg-indigo-500/20 blur-3xl"></div>
+        <div class="absolute -bottom-32 left-1/3 w-80 h-80 rounded-full bg-cyan-400/10 blur-3xl"></div>
+        <div class="relative grid lg:grid-cols-[1.3fr_.7fr] gap-8 items-center p-7 sm:p-10 lg:p-14">
+          <div>
+            <span class="inline-flex items-center gap-2 rounded-full border border-indigo-300/25 bg-white/10 px-3 py-1.5 text-xs font-bold text-indigo-100">
+              <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span> VERSI DEMONSTRASI PROJEK
+            </span>
+            <p class="eyebrow text-indigo-300 mt-6">Berani bercerita. Bersama mencari solusi.</p>
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.08] tracking-tight mt-3 max-w-3xl">
+              Simulasi Sistem R.A.S.A. <span class="text-cyan-300">SMPN 13</span> Pekanbaru.
+            </h1>
+            <p class="mt-5 text-indigo-100/85 leading-7 max-w-2xl text-sm sm:text-base">
+              Halaman demo interaktif untuk menguji alur pelaporan pengaduan cyberbullying secara anonim, pengecekan status tiket, dan panel pengelolaan Guru BK.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-3 mt-8">
+              <button onclick="switchView('report')" class="inline-flex justify-center items-center gap-2 bg-cyan-300 hover:bg-cyan-200 text-indigo-950 font-extrabold px-6 py-3.5 rounded-2xl transition shadow-lg shadow-cyan-950/20">
+                Uji Coba Laporan <span aria-hidden="true">→</span>
+              </button>
+              <button onclick="switchView('admin')" class="inline-flex justify-center items-center gap-2 bg-white/10 hover:bg-white/15 border border-white/15 text-white font-bold px-6 py-3.5 rounded-2xl transition">
+                Buka Dashboard BK
+              </button>
+            </div>
+          </div>
+          <div class="relative">
+            <div class="max-w-sm mx-auto rounded-[28px] border border-white/15 bg-white/10 p-5 sm:p-6 backdrop-blur-xl">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-xs text-indigo-200 font-semibold">PANDUAN MASUK ADMIN</p>
+                  <h2 class="text-xl font-extrabold mt-1">Kredensial Demo</h2>
+                </div>
+                <div class="w-12 h-12 rounded-2xl bg-cyan-300 text-indigo-950 grid place-items-center text-xl font-bold">🔑</div>
+              </div>
+              <div class="mt-5 rounded-2xl bg-indigo-950/55 border border-white/10 p-4 space-y-2 text-xs">
+                <p class="text-indigo-200 font-bold">Gunakan data berikut untuk login Guru BK:</p>
+                <p>• Username: <code class="bg-white/20 px-1.5 py-0.5 rounded text-cyan-300 font-bold">bk123</code></p>
+                <p>• Password: <code class="bg-white/20 px-1.5 py-0.5 rounded text-cyan-300 font-bold">sekolahaman</code></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FORM LAPORAN -->
+    <section id="view-report" class="hidden-view max-w-3xl mx-auto">
+      <button onclick="switchView('home')" class="text-sm font-bold text-indigo-700 hover:text-indigo-900 mb-5">← Kembali ke beranda</button>
+      <div class="bg-white rounded-3xl border border-slate-200 soft-shadow overflow-hidden">
+        <div class="bg-gradient-to-r from-indigo-950 to-indigo-800 text-white p-6 sm:p-8">
+          <p class="eyebrow text-indigo-300">Simulasi Formulir Demo · SMPN 13 Pekanbaru</p>
+          <h2 class="text-2xl sm:text-3xl font-extrabold mt-2">Kirim Pengaduan Simulasi.</h2>
+          <p class="text-indigo-100/80 text-sm mt-2 leading-6">Masukkan data uji coba Anda untuk melihat bagaimana tiket dan sistem pelacakan bekerja.</p>
+        </div>
+        <form id="reportForm" class="p-6 sm:p-8 space-y-5">
+          <div class="grid sm:grid-cols-2 gap-5">
+            <div><label class="field-label" for="platform">Platform simulasi <span class="text-rose-500">*</span></label><select id="platform" required class="field"><option value="">Pilih platform</option><option>Instagram</option><option>TikTok</option><option>WhatsApp</option><option>YouTube</option><option>Game Online</option><option>Lainnya</option></select></div>
+            <div><label class="field-label" for="category">Jenis kejadian <span class="text-rose-500">*</span></label><select id="category" required class="field"><option value="">Pilih kategori</option><option>Pesan atau komentar menyakitkan</option><option>Penghinaan atau ejekan berulang</option><option>Penyebaran foto/video tanpa izin</option><option>Ancaman atau intimidasi</option><option>Lainnya</option></select></div>
+          </div>
+          <div><label class="field-label" for="perpetrator">Nama akun terkait (opsional)</label><input id="perpetrator" class="field" maxlength="100" placeholder="Contoh: @akun_uji"></div>
+          <div><label class="field-label" for="when">Waktu kejadian (opsional)</label><input id="when" class="field" maxlength="100" placeholder="Contoh: Hari ini"></div>
+          <div><label class="field-label" for="chronology">Kronologi simulasi <span class="text-rose-500">*</span></label><textarea id="chronology" required minlength="15" maxlength="3000" rows="5" class="field resize-y" placeholder="Tuliskan teks uji coba pengaduan di sini (minimal 15 karakter)..."></textarea><div class="flex justify-between gap-3 mt-1.5"><p class="text-xs text-slate-400">Minimal 15 karakter.</p><span id="charCount" class="text-xs text-slate-400">0/3000</span></div></div>
+          <div><label class="field-label" for="evidence">Unggah bukti dummy (opsional)</label><input id="evidence" type="file" accept="image/png,image/jpeg" class="block w-full text-sm text-slate-500 file:mr-3 file:rounded-xl file:border-0 file:bg-indigo-50 file:px-4 file:py-2.5 file:font-bold file:text-indigo-700 hover:file:bg-indigo-100"></div>
+          <label class="flex items-start gap-3 text-sm text-slate-600"><input id="consent" type="checkbox" required class="mt-1 accent-indigo-600"><span>Saya memahami ini adalah halaman demonstrasi proyek sekolah.</span></label>
+          <div class="flex flex-col-reverse sm:flex-row gap-3 pt-2"><button type="button" onclick="switchView('home')" class="px-5 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 font-bold text-slate-700">Batal</button><button type="submit" class="flex-1 px-5 py-3 rounded-xl bg-indigo-700 hover:bg-indigo-800 text-white font-extrabold shadow-lg shadow-indigo-700/20">Kirim Laporan Demo →</button></div>
+        </form>
+      </div>
+    </section>
+
+    <!-- SUCCESS -->
+    <section id="view-success" class="hidden-view max-w-lg mx-auto">
+      <div class="bg-white rounded-3xl border border-slate-200 soft-shadow p-7 sm:p-9 text-center">
+        <div class="w-16 h-16 mx-auto rounded-2xl bg-emerald-100 text-emerald-700 grid place-items-center text-3xl">✓</div>
+        <p class="eyebrow text-emerald-700 mt-5">Simulasi Berhasil</p>
+        <h2 class="text-2xl sm:text-3xl font-extrabold mt-2">Laporan Demo Tercatat.</h2>
+        <p class="text-sm text-slate-500 mt-3 leading-6">Gunakan kode tiket di bawah ini untuk menguji fitur pelacakan status:</p>
+        <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-5 mt-6">
+          <p class="eyebrow text-indigo-500">Kode Tiket Demo</p><p id="displayTicketCode" class="text-3xl font-extrabold tracking-wider text-indigo-800 mt-2">RASA-0000</p>
+          <button onclick="copyTicket()" class="mt-3 text-sm font-bold text-indigo-700 hover:text-indigo-900">Salin kode tiket</button>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-3 mt-6"><button onclick="switchView('track')" class="flex-1 rounded-xl bg-indigo-700 hover:bg-indigo-800 text-white font-bold py-3">Uji Lacak Status</button><button onclick="switchView('home')" class="flex-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3">Beranda</button></div>
+      </div>
+    </section>
+
+    <!-- TRACK -->
+    <section id="view-track" class="hidden-view max-w-2xl mx-auto">
+      <button onclick="switchView('home')" class="text-sm font-bold text-indigo-700 hover:text-indigo-900 mb-5">← Kembali ke beranda</button>
+      <div class="bg-white rounded-3xl border border-slate-200 soft-shadow p-6 sm:p-8">
+        <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-700 grid place-items-center text-2xl">⌕</div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold mt-4">Lacak Tiket Demo.</h2>
+        <p class="text-sm text-slate-500 mt-2">Masukkan kode tiket simulasi Anda.</p>
+        <form id="trackForm" class="flex flex-col sm:flex-row gap-3 mt-6"><input id="inputSearchTicket" class="field uppercase font-extrabold tracking-wider" maxlength="9" placeholder="RASA-1234" aria-label="Kode tiket" required><button class="shrink-0 rounded-xl bg-indigo-700 hover:bg-indigo-800 text-white font-bold px-6 py-3">Cek Status</button></form>
+        <div id="searchResultContainer" class="hidden mt-6 border-t border-slate-100 pt-6"></div>
+      </div>
+    </section>
+
+    <!-- ADMIN LOGIN -->
+    <section id="view-admin-login" class="hidden-view max-w-md mx-auto">
+      <div class="bg-white rounded-3xl border border-slate-200 soft-shadow p-7 sm:p-8">
+        <div class="w-14 h-14 rounded-2xl bg-indigo-950 text-white grid place-items-center text-2xl">♙</div>
+        <p class="eyebrow text-indigo-600 mt-5">Akses Simulasi</p><h2 class="text-2xl font-extrabold mt-2">Login Guru BK (Demo)</h2>
+        <p class="text-sm text-slate-500 mt-2 leading-6">Masukkan akun uji coba untuk masuk ke panel pengelola.</p>
+        <form id="adminLoginForm" class="space-y-4 mt-6">
+          <div><label class="field-label" for="adminUser">Username</label><input id="adminUser" class="field" autocomplete="username" required placeholder="bk123"></div>
+          <div><label class="field-label" for="adminPass">Password</label><input id="adminPass" type="password" class="field" autocomplete="current-password" required placeholder="sekolahaman"></div>
+          <p id="loginError" class="hidden text-sm text-rose-600" role="alert">Username: bk123 / Password: sekolahaman</p>
+          <button class="w-full rounded-xl bg-indigo-950 hover:bg-indigo-900 text-white font-extrabold py-3">Masuk Dashboard Demo →</button>
+        </form>
+        <button onclick="switchView('home')" class="w-full mt-4 text-sm text-slate-500 hover:text-slate-800 font-bold">Kembali ke beranda</button>
+      </div>
+    </section>
+
+    <!-- DASHBOARD -->
+    <section id="view-admin-dashboard" class="hidden-view space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-indigo-950 to-indigo-800 text-white p-6 sm:p-8 rounded-3xl">
+        <div><p class="eyebrow text-cyan-300">SMP Negeri 13 Pekanbaru · Mode Simulasi</p><h2 class="text-2xl sm:text-3xl font-extrabold mt-2">Dashboard Pengelola (Demo)</h2></div>
+        <button onclick="logoutAdmin()" class="rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 px-4 py-3 text-sm font-bold">Keluar ↗</button>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white border border-slate-200 rounded-2xl p-5"><p class="text-xs font-bold text-slate-500">TOTAL LAPORAN</p><p id="statTotal" class="text-3xl font-extrabold mt-2">0</p></div>
+        <div class="bg-amber-50 border border-amber-100 rounded-2xl p-5"><p class="text-xs font-bold text-amber-700">MENUNGGU</p><p id="statWaiting" class="text-3xl font-extrabold text-amber-900 mt-2">0</p></div>
+        <div class="bg-blue-50 border border-blue-100 rounded-2xl p-5"><p class="text-xs font-bold text-blue-700">DIPROSES</p><p id="statProcess" class="text-3xl font-extrabold text-blue-900 mt-2">0</p></div>
+        <div class="bg-emerald-50 border border-emerald-100 rounded-2xl p-5"><p class="text-xs font-bold text-emerald-700">SELESAI</p><p id="statDone" class="text-3xl font-extrabold text-emerald-900 mt-2">0</p></div>
+      </div>
+      <div class="bg-white border border-slate-200 rounded-3xl overflow-hidden">
+        <div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div><h3 class="font-extrabold text-lg">Daftar Laporan Masuk (Simulasi)</h3></div>
+          <div class="flex flex-col sm:flex-row gap-2"><input id="adminSearch" class="field sm:w-56" placeholder="Cari kode / platform..." aria-label="Cari laporan"><select id="adminFilter" class="field sm:w-52" aria-label="Filter status"><option value="">Semua status</option><option>Menunggu Verifikasi</option><option>Sedang Diproses</option><option>Selesai / Ditangani</option></select><button onclick="loadAdminDashboard()" class="rounded-xl bg-slate-100 hover:bg-slate-200 px-4 py-3 text-sm font-bold">Muat ulang</button></div>
+        </div>
+        <div id="adminTableWrap" class="overflow-x-auto">
+          <table class="w-full text-left text-sm min-w-[850px]"><thead class="bg-slate-50 text-slate-500 text-xs"><tr><th class="p-4">Kode tiket</th><th class="p-4">Tanggal</th><th class="p-4">Platform / kategori</th><th class="p-4">Kronologi</th><th class="p-4">Status</th><th class="p-4">Tindakan</th></tr></thead><tbody id="adminTableBody"></tbody></table>
+        </div>
+        <div id="adminEmpty" class="hidden p-10 text-center"><div class="text-3xl">📭</div><p class="font-bold mt-3">Belum ada laporan simulasi.</p></div>
+      </div>
+    </section>
+
+    <!-- DETAIL MODAL -->
+    <div id="detailModal" class="hidden fixed inset-0 z-50 bg-slate-950/60 p-4 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+      <div class="max-w-xl mx-auto my-8 bg-white rounded-3xl overflow-hidden shadow-2xl">
+        <div class="bg-indigo-950 text-white p-6 flex items-start justify-between gap-4"><div><p class="eyebrow text-indigo-300">Detail Simulasi</p><h3 id="detailTitle" class="text-xl font-extrabold mt-2">Rincian tiket</h3></div><button onclick="closeDetail()" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20">✕</button></div>
+        <div id="detailBody" class="p-6 space-y-4"></div>
+        <div class="p-6 pt-0"><button onclick="closeDetail()" class="w-full rounded-xl bg-slate-100 hover:bg-slate-200 py-3 font-bold">Tutup</button></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="mt-auto border-t border-slate-200 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
+      <p><b class="text-slate-600">R.A.S.A. (Demo)</b> · SMP Negeri 13 Pekanbaru · Prototipe 2026</p>
+      <p>Simulasi Interaktif</p>
+    </div>
+  </footer>
+  <div id="toast" class="toast hidden rounded-xl bg-slate-900 text-white px-5 py-3 text-sm font-semibold shadow-xl" role="status" aria-live="polite"></div>
+
+  <script>
+    const STORAGE_KEY = 'rasa_smpn13_demo_v1';
+    let lastTicket = '';
+    let adminLoggedIn = false;
+
+    function getReports() {
+      try {
+        const value = localStorage.getItem(STORAGE_KEY);
+        const parsed = value ? JSON.parse(value) : [];
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (error) { return []; }
+    }
+    function saveReports(reports) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(reports));
+        return true;
+      } catch (error) {
+        showToast('Data gagal disimpan.');
+        return false;
+      }
+    }
+    function escapeHTML(value) {
+      return String(value ?? '').replace(/[&<>"']/g, char => ({
+        '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+      }[char]));
+    }
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.remove('hidden');
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.add('hidden'), 3000);
+    }
+    function switchView(name) {
+      if (name === 'admin') name = 'admin-login';
+      if (name === 'admin-dashboard' && !adminLoggedIn) name = 'admin-login';
+      document.querySelectorAll('main > section[id^="view-"]').forEach(section
